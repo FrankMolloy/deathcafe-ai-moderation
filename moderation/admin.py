@@ -13,3 +13,14 @@ class PostAdmin(admin.ModelAdmin):
 class ModerationResultAdmin(admin.ModelAdmin):
     list_display = ("post", "recommendation", "confidence", "model_name", "created_at")
     list_filter = ("recommendation", "created_at")
+    readonly_fields = (
+        "post",
+        "recommendation",
+        "confidence",
+        "explanation",
+        "triggered_rules",
+        "triggered_rule_descriptions",
+        "raw_response",
+        "model_name",
+        "created_at",
+    )

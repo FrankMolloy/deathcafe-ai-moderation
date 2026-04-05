@@ -18,7 +18,6 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-
 class ModerationResult(models.Model):
     DECISION_CHOICES = [
         ("approve", "Approve"),
@@ -35,6 +34,7 @@ class ModerationResult(models.Model):
     confidence = models.FloatField()
     explanation = models.TextField()
     triggered_rules = models.JSONField(default=list)
+    triggered_rule_descriptions = models.JSONField(default=list, blank=True)
     raw_response = models.JSONField(default=dict, blank=True)
     model_name = models.CharField(max_length=100, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 
-from .prompts import MODERATION_POLICY, OUTPUT_FORMAT_INSTRUCTIONS
+from .prompts import MODERATION_POLICY, OUTPUT_FORMAT_INSTRUCTIONS, RULE_DESCRIPTIONS
 
 load_dotenv()
 
@@ -44,6 +44,11 @@ Body:
             "triggered_rules": ["invalid_model_output"],
             "explanation": "The model did not return valid JSON.",
         }
+
+    parsed["triggered_rule_descriptions"] = [
+        RULE_DESCRIPTIONS.get(rule_id, f"Unknown rule: {rule_id}")
+        for rule_id in parsed.get("triggered_rules", [])
+    ]
 
     parsed["raw_response"] = {"content": content}
     parsed["model_name"] = response.model
