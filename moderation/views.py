@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import PostSubmissionForm
+from .models import ModerationResult
+from .services.moderation_engine import moderate_text
 
 
 def submit_post(request):
@@ -9,7 +11,29 @@ def submit_post(request):
             post = form.save(commit=False)
             post.status = "pending"
             post.save()
-            return redirect("submit_post")
+
+            result = moderate_text(post.title, post.body)
+
+            ModerationResult.objects.create(
+                post=post,
+                recommendation=result["recommendation"],
+                confidence=result["confidence"],
+                explanation=result["explanation"],
+                triggered_rules=result.get("triggered_rules", []),
+                raw_response=result,
+                model_name=result.get("model_name", ""),
+            )
+
+            if result["recommendation"] == "approve":
+                post.status = "approved"
+            elif result["recommendation"] == "reject":
+                post.status = "rejected"
+            else:
+                post.status = "needs_review"
+
+            post.save()
+
+            return redirect("/admin/")
     else:
         form = PostSubmissionForm()
 
