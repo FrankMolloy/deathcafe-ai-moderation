@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from .forms import PostSubmissionForm
 from .models import ModerationResult
 from .services.moderation_engine import moderate_text
+from .services.stats import get_moderation_stats
 
 
 def submit_post(request):
@@ -45,3 +46,8 @@ def submit_post(request):
         form = PostSubmissionForm()
 
     return render(request, "moderation/submit_post.html", {"form": form})
+
+
+def moderation_stats_view(request):
+    stats = get_moderation_stats()
+    return render(request, "moderation/stats.html", {"stats": stats})

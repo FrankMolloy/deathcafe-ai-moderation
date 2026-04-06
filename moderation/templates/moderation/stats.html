@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Moderation Stats</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+        h1, h2 {
+            margin-bottom: 10px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            background: #fafafa;
+        }
+        .card h3 {
+            margin-top: 0;
+            font-size: 16px;
+            color: #444;
+        }
+        .card p {
+            font-size: 24px;
+            margin: 8px 0 0;
+            font-weight: bold;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 12px;
+            margin-bottom: 30px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Moderation Stats</h1>
+
+    <div class="stats-grid">
+        <div class="card">
+            <h3>Total Posts</h3>
+            <p>{{ stats.total_posts }}</p>
+        </div>
+        <div class="card">
+            <h3>Total Moderation Results</h3>
+            <p>{{ stats.total_results }}</p>
+        </div>
+        <div class="card">
+            <h3>Average Confidence</h3>
+            <p>{{ stats.avg_confidence }}</p>
+        </div>
+        <div class="card">
+            <h3>Approved</h3>
+            <p>{{ stats.approved_count }}</p>
+        </div>
+        <div class="card">
+            <h3>Rejected</h3>
+            <p>{{ stats.rejected_count }}</p>
+        </div>
+        <div class="card">
+            <h3>Needs Review</h3>
+            <p>{{ stats.needs_review_count }}</p>
+        </div>
+        <div class="card">
+            <h3>Reviewed By Human</h3>
+            <p>{{ stats.reviewed_count }}</p>
+        </div>
+        <div class="card">
+            <h3>AI/Human Agreements</h3>
+            <p>{{ stats.agreement_count }}</p>
+        </div>
+        <div class="card">
+            <h3>Agreement Rate</h3>
+            <p>{{ stats.agreement_rate }}%</p>
+        </div>
+    </div>
+
+    <h2>Top Triggered Rules</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Rule</th>
+                <th>Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rule, count in stats.top_rules %}
+            <tr>
+                <td>{{ rule }}</td>
+                <td>{{ count }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2">No triggered rules yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Latest Moderation Results</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Post</th>
+                <th>Recommendation</th>
+                <th>Confidence</th>
+                <th>Triggered Rules</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in stats.latest_results %}
+            <tr>
+                <td>{{ result.post.title }}</td>
+                <td>{{ result.recommendation }}</td>
+                <td>{{ result.confidence }}</td>
+                <td>{{ result.triggered_rules }}</td>
+                <td>{{ result.created_at }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">No moderation results yet.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

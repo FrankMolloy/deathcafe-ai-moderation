@@ -98,11 +98,14 @@ Important:
 - Even if the product, service, or organisation seems relevant or well-intentioned, promotional use is not appropriate here
 
 R10: Misrepresentation of the Death Cafe model
-Reject content that presents something as a Death Cafe while clearly contradicting the model, for example:
-- agenda-led or theme-led promotion
-- guest-speaker-led events presented as Death Cafe
-- events pushing conclusions, products, or courses of action
-- use of the Death Cafe name in a way that conflicts with the platform’s principles
+Reject content under R10 only when it explicitly presents itself as a Death Cafe, or clearly refers to a Death Cafe event, while contradicting the model. Examples include:
+- agenda-led or theme-led events presented as a Death Cafe
+- guest-speaker-led events presented as a Death Cafe
+- events pushing conclusions, products, or courses of action while using the Death Cafe name
+- promotional or branded use of the Death Cafe name that conflicts with the platform’s principles
+
+Do NOT use R10 for generic spam, irrelevant content, or ordinary off-topic posts that do not claim to be a Death Cafe.
+Use R5 and/or R9 for those instead.
 
 ## Needs Review (use ONLY if the content is unclear, sensitive, or context-dependent)
 
