@@ -18,26 +18,6 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-from django.db import models
-
-
-class Post(models.Model):
-    STATUS_CHOICES = [
-        ("pending", "Pending"),
-        ("approved", "Approved"),
-        ("rejected", "Rejected"),
-        ("needs_review", "Needs Review"),
-    ]
-
-    title = models.CharField(max_length=255)
-    body = models.TextField()
-    image = models.ImageField(upload_to="posts/", null=True, blank=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.title
-
 
 class ModerationResult(models.Model):
     DECISION_CHOICES = [
@@ -58,11 +38,25 @@ class ModerationResult(models.Model):
         ("human_override", "Human Override"),
     ]
 
+    PROCESSING_STATUS_CHOICES = [
+        ("success", "Success"),
+        ("failed", "Failed"),
+        ("pending", "Pending"),
+    ]
+
+    AUTO_ACTION_CHOICES = [
+        ("none", "None"),
+        ("auto_approved", "Auto Approved"),
+        ("auto_rejected", "Auto Rejected"),
+        ("queued_for_review", "Queued For Review"),
+    ]
+
     post = models.OneToOneField(
         Post,
         on_delete=models.CASCADE,
         related_name="moderation_result"
     )
+
     recommendation = models.CharField(max_length=20, choices=DECISION_CHOICES)
     confidence = models.FloatField()
     explanation = models.TextField()
@@ -84,6 +78,21 @@ class ModerationResult(models.Model):
     )
     moderator_notes = models.TextField(blank=True)
     reviewed_at = models.DateTimeField(null=True, blank=True)
+
+    auto_action_taken = models.CharField(
+        max_length=30,
+        choices=AUTO_ACTION_CHOICES,
+        default="none"
+    )
+    auto_action_reason = models.TextField(blank=True)
+    threshold_version = models.CharField(max_length=50, blank=True)
+    prompt_version = models.CharField(max_length=50, blank=True)
+    processing_status = models.CharField(
+        max_length=20,
+        choices=PROCESSING_STATUS_CHOICES,
+        default="success"
+    )
+    error_message = models.TextField(blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
 
