@@ -15,28 +15,32 @@ def submit_post(request):
 
             result = moderate_text(post.title, post.body)
 
-            ModerationResult.objects.create(
-              post=post,
-              recommendation=result["recommendation"],
-              confidence=result["confidence"],
-              explanation=result["explanation"],
-              triggered_rules=result.get("triggered_rules", []),
-              triggered_rule_descriptions=result.get("triggered_rule_descriptions", []),
-              raw_response=result,
-              model_name=result.get("model_name", ""),
-            )
-
             if result["recommendation"] == "approve":
                 post.status = "approved"
+                final_decision = "approved"
             elif result["recommendation"] == "reject":
                 post.status = "rejected"
+                final_decision = "rejected"
             else:
                 post.status = "needs_review"
+                final_decision = "needs_review"
 
             post.save()
 
-            return redirect("/admin/")
+            ModerationResult.objects.create(
+                post=post,
+                recommendation=result["recommendation"],
+                confidence=result["confidence"],
+                explanation=result["explanation"],
+                triggered_rules=result.get("triggered_rules", []),
+                triggered_rule_descriptions=result.get("triggered_rule_descriptions", []),
+                raw_response=result,
+                model_name=result.get("model_name", ""),
+                final_decision=final_decision,
+                decision_source="ai_auto",
+            )
 
+            return redirect("/admin/")
     else:
         form = PostSubmissionForm()
 

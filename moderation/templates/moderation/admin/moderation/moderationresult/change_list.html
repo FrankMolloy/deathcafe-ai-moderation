@@ -1,0 +1,49 @@
+{% extends "admin/change_list.html" %}
+
+{% block content_title %}
+    <h1>Moderation Results Dashboard</h1>
+{% endblock %}
+
+{% block result_list %}
+    {% if dashboard_stats %}
+        <div style="margin-bottom: 24px; padding: 16px; border: 1px solid #ddd; background: #fff;">
+            <h2 style="margin-top: 0;">Moderation Stats</h2>
+
+            <p><strong>Total moderation results:</strong> {{ dashboard_stats.total_results }}</p>
+
+            <h3>AI Recommendations</h3>
+            <p>
+                Approve: {{ dashboard_stats.ai_approve }} |
+                Reject: {{ dashboard_stats.ai_reject }} |
+                Needs Review: {{ dashboard_stats.ai_review }}
+            </p>
+
+            <h3>Final Decisions</h3>
+            <p>
+                Approved: {{ dashboard_stats.final_approved }} |
+                Rejected: {{ dashboard_stats.final_rejected }} |
+                Needs Review: {{ dashboard_stats.final_review }}
+            </p>
+
+            <h3>Human Feedback Loop</h3>
+            <p>
+                Reviewed: {{ dashboard_stats.reviewed }} |
+                Agreements: {{ dashboard_stats.agreements }} |
+                Overrides: {{ dashboard_stats.overrides }}
+            </p>
+
+            <h3>Top Triggered Rules</h3>
+            {% if dashboard_stats.top_rules %}
+                <ul>
+                    {% for rule, count in dashboard_stats.top_rules %}
+                        <li>{{ rule }} — {{ count }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No triggered rules yet.</p>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {{ block.super }}
+{% endblock %}
